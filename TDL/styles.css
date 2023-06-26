@@ -1,0 +1,22 @@
+.TaskList {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .TaskList h2 {
+    color: #333;
+  }
+  
+  .TaskList ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .TaskList li {
+    margin-bottom: 10px;
+  }
+  
+  .TaskList li:before {
+    content: '•';
+    margin-right: 10px;
+  }
