@@ -1,0 +1,59 @@
+body {
+  background-color: #e02a2a; /* Change background color here */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.TaskList {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.TaskList h2 {
+  color: #2012e8;
+}
+
+.TaskForm {
+  margin-bottom: 20px;
+}
+
+.TaskForm input {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.TaskForm button {
+  padding: 5px 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.TaskForm button:hover {
+  background-color: #45a049;
+}
+
+.TaskList ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.TaskItem {
+  margin-bottom: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.TaskItem.completed {
+  text-decoration: line-through;
+  color: #888;
+}
