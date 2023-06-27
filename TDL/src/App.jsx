@@ -3,15 +3,32 @@ import TaskList from './TaskList.jsx';
 import './styles.css';
 
 const App = () => {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: 'Task 1', completed: false },
-    { id: 2, title: 'Task 2', completed: false },
-    { id: 3, title: 'Task 3', completed: false },
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [isFormOpen, setFormOpen] = useState(false);
+  const [taskTitle, setTaskTitle] = useState('');
 
-  const addTask = (title) => {
-    const newTask = { id: Date.now(), title, completed: false };
+  const openForm = () => {
+    setFormOpen(true);
+  };
+
+  const closeForm = () => {
+    setFormOpen(false);
+    setTaskTitle('');
+  };
+
+  const handleTaskTitleChange = (event) => {
+    setTaskTitle(event.target.value);
+  };
+
+  const addTask = (event) => {
+    event.preventDefault();
+    if (taskTitle.trim() === '') {
+      return;
+    }
+    const newTask = { id: Date.now(), title: taskTitle, completed: false };
     setTasks([...tasks, newTask]);
+    setFormOpen(false);
+    setTaskTitle('');
   };
 
   const markTaskAsCompleted = (taskId) => {
@@ -23,11 +40,30 @@ const App = () => {
 
   return (
     <div className="App">
-      <TaskList
-        tasks={tasks}
-        addTask={addTask}
-        markTaskAsCompleted={markTaskAsCompleted}
-      />
+      <h1>Task List</h1>
+      {!isFormOpen && (
+        <button className="add-button" onClick={openForm}>
+          Add Task
+        </button>
+      )}
+      {isFormOpen && (
+        <form onSubmit={addTask} className="form">
+          <label>
+            Enter task title:
+            <input
+              type="text"
+              name="title"
+              value={taskTitle}
+              onChange={handleTaskTitleChange}
+            />
+          </label>
+          <button type="submit">Add</button>
+          <button type="button" onClick={closeForm}>
+            Cancel
+          </button>
+        </form>
+      )}
+      <TaskList tasks={tasks} markTaskAsCompleted={markTaskAsCompleted} />
     </div>
   );
 };

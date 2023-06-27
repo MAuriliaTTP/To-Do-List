@@ -19,16 +19,18 @@ body {
   color: #2012e8;
 }
 
-.TaskForm {
+form {
+  display: flex;
+  align-items: center;
   margin-bottom: 20px;
 }
 
-.TaskForm input {
+input[type='text'] {
   margin-right: 10px;
   padding: 5px;
 }
 
-.TaskForm button {
+button {
   padding: 5px 10px;
   background-color: #4caf50;
   color: #fff;
@@ -36,24 +38,21 @@ body {
   cursor: pointer;
 }
 
-.TaskForm button:hover {
+button:hover {
   background-color: #45a049;
 }
 
-.TaskList ul {
+ul {
   list-style-type: none;
   padding: 0;
 }
 
-.TaskItem {
+li {
   margin-bottom: 10px;
   cursor: pointer;
-  background-color: #fff;
-  padding: 10px;
-  border-radius: 4px;
 }
 
-.TaskItem.completed {
+li.completed {
   text-decoration: line-through;
   color: #888;
 }

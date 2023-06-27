@@ -1,22 +1,17 @@
 import React from 'react';
-import TaskItem from './TaskItem.jsx';
-import TaskForm from './TaskForm.jsx';
+import TaskItem from './TaskItem';
 
-const TaskList = ({ tasks, addTask, markTaskAsCompleted }) => {
+const TaskList = ({ tasks, markTaskAsCompleted }) => {
   return (
-    <div className="TaskList">
-      <h2>Task List</h2>
-      <TaskForm addTask={addTask} />
-      <ul>
-        {tasks.map((task) => (
-          <TaskItem
-            key={task.id}
-            task={task}
-            markTaskAsCompleted={markTaskAsCompleted}
-          />
-        ))}
-      </ul>
-    </div>
+    <ul>
+      {tasks.map((task) => (
+        <TaskItem
+          key={task.id}
+          task={task}
+          markTaskAsCompleted={markTaskAsCompleted}
+        />
+      ))}
+    </ul>
   );
 };
 
