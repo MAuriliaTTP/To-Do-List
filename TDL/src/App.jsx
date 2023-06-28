@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import TaskList from './TaskList.jsx';
+import Modal from './Modal.jsx';
 import './styles.css';
 
 const App = () => {
   const [tasks, setTasks] = useState([]);
-  const [isFormOpen, setFormOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
 
-  const openForm = () => {
-    setFormOpen(true);
+  const openModal = () => {
+    setModalOpen(true);
   };
 
-  const closeForm = () => {
-    setFormOpen(false);
+  const closeModal = () => {
+    setModalOpen(false);
     setTaskTitle('');
   };
 
@@ -27,8 +28,7 @@ const App = () => {
     }
     const newTask = { id: Date.now(), title: taskTitle, completed: false };
     setTasks([...tasks, newTask]);
-    setFormOpen(false);
-    setTaskTitle('');
+    closeModal();
   };
 
   const markTaskAsCompleted = (taskId) => {
@@ -41,27 +41,29 @@ const App = () => {
   return (
     <div className="App">
       <h1>Task List</h1>
-      {!isFormOpen && (
-        <button className="add-button" onClick={openForm}>
+      {!isModalOpen && (
+        <button className="add-button" onClick={openModal}>
           Add Task
         </button>
       )}
-      {isFormOpen && (
-        <form onSubmit={addTask} className="form">
-          <label>
-            Enter task title:
-            <input
-              type="text"
-              name="title"
-              value={taskTitle}
-              onChange={handleTaskTitleChange}
-            />
-          </label>
-          <button type="submit">Add</button>
-          <button type="button" onClick={closeForm}>
-            Cancel
-          </button>
-        </form>
+      {isModalOpen && (
+        <Modal onClose={closeModal}>
+          <form onSubmit={addTask} className="form">
+            <label>
+              Enter task title:
+              <input
+                type="text"
+                name="title"
+                value={taskTitle}
+                onChange={handleTaskTitleChange}
+              />
+            </label>
+            <button type="submit">Add</button>
+            <button type="button" onClick={closeModal}>
+              Cancel
+            </button>
+          </form>
+        </Modal>
       )}
       <TaskList tasks={tasks} markTaskAsCompleted={markTaskAsCompleted} />
     </div>

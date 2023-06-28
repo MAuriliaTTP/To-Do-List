@@ -3,7 +3,7 @@ import TaskItem from './TaskItem';
 
 const TaskList = ({ tasks, markTaskAsCompleted }) => {
   return (
-    <ul>
+    <ul className = "TaskList">
       {tasks.map((task) => (
         <TaskItem
           key={task.id}

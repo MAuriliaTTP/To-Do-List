@@ -10,13 +10,21 @@ body {
 
 .TaskList {
   font-family: Arial, sans-serif;
-  padding: 20px;
-  width: 100%;
-  max-width: 400px;
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 20px;
 }
 
 .TaskList h2 {
   color: #2012e8;
+}
+
+.TaskList .task {
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: #fff;
+  border-radius: 4px;
 }
 
 form {
