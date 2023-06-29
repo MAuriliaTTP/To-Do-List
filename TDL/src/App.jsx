@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskList from './TaskList.jsx';
 import Modal from './Modal.jsx';
 import './styles.css';
@@ -7,6 +7,12 @@ const App = () => {
   const [tasks, setTasks] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
+
+  useEffect(() => {
+    fetch('http://localhost:3000/tasks')
+      .then((response) => response.json())
+      .then((data) => setTasks(data));
+  }, []);
 
   const openModal = () => {
     setModalOpen(true);
@@ -27,6 +33,19 @@ const App = () => {
       return;
     }
     const newTask = { id: Date.now(), title: taskTitle, completed: false };
+    
+    fetch('http://localhost:3000/tasks', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newTask),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      setTasks([...tasks, data]);
+      closeModal();
+    });
     setTasks([...tasks, newTask]);
     closeModal();
   };
