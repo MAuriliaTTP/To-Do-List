@@ -7,7 +7,6 @@ import TaskDetails from './TaskDetails.jsx';
 
 const App = () => {
   const [tasksList1, setTasksList1] = useState([]);
-  const [tasksList2, setTasksList2] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
   const [selectedList, setSelectedList] = useState(null);
@@ -17,11 +16,6 @@ const App = () => {
     fetch('http://localhost:3000/tasksList1')
       .then((response) => response.json())
       .then((data) => setTasksList1(data));
-      
-    // Fetch data for List 2
-    fetch('http://localhost:3000/tasksList2')
-      .then((response) => response.json())
-      .then((data) => setTasksList2(data));
   }, []);
 
   const openModal = (list) => {
@@ -43,13 +37,10 @@ const App = () => {
     if (taskTitle.trim() === '') {
       return;
     }
-    const newTask = { id: Date.now(), title: taskTitle, completed: false };
+    const newTask = { id: Date.now(), title: taskTitle, completed: false, description:'' };
 
     if (selectedList === 'list1') {
       setTasksList1([...tasksList1, newTask]);
-    } else if (selectedList === 'list2') {
-      setTasksList2([...tasksList2, newTask]);
-    }
 
     // Determine the selected list and update accordingly
     if (selectedList === 'list1') {
@@ -65,21 +56,8 @@ const App = () => {
           setTasksList1([...tasksList1, data]);
           closeModal();
         });
-    } else if (selectedList === 'list2') {
-      fetch('http://localhost:3000/tasksList2', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTask),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setTasksList2([...tasksList2, data]);
-          closeModal();
-        });
+    } 
     }
-
     closeModal();
   };
 
@@ -90,12 +68,7 @@ const App = () => {
         task.id === taskId ? { ...task, completed: true } : task
       );
       setTasksList1(updatedTasks);
-    } else if (selectedList === 'list2') {
-      const updatedTasks = tasksList2.map((task) =>
-        task.id === taskId ? { ...task, completed: true } : task
-      );
-      setTasksList2(updatedTasks);
-    }
+    } 
   };
 
   return (
@@ -103,10 +76,7 @@ const App = () => {
       <div className="App">
         <h1>Task List</h1>
         <button className="add-button" onClick={() => openModal('list1')}>
-          Add Task to List 1
-        </button>
-        <button className="add-button" onClick={() => openModal('list2')}>
-          Add Task to List 2
+          Add Task
         </button>
         {isModalOpen && (
           <Modal onClose={closeModal}>
@@ -127,21 +97,16 @@ const App = () => {
             </form>
           </Modal>
         )}
-        <h2>List 1</h2>
+        <h2>List</h2>
         <TaskList tasks={tasksList1} markTaskAsCompleted={markTaskAsCompleted} />
-        <h2>List 2</h2>
-        <TaskList tasks={tasksList2} markTaskAsCompleted={markTaskAsCompleted} />
       </div>
-      <div className="App">
-      {/*console.log(tasklist1)*/}
-        <Routes>
-          <Route
-            path="/task/:taskId"
-            
-            element={<TaskDetails tasks={tasksList1.concat(tasksList2)} />}
-          />
-        </Routes>
-      </div>
+      <Routes>
+      <Route
+        path="/"
+        element={<TaskList tasks={tasksList1} markTaskAsCompleted={markTaskAsCompleted} />}
+      />
+      <Route path="/task/:taskId" element={<TaskDetails tasks={tasksList1} />} />
+    </Routes>
     </Router>
   );
 };
