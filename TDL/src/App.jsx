@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import TaskList from './TaskList.jsx';
 import Modal from './Modal.jsx';
 import './styles.css';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import TaskDetails from './TaskDetails.jsx';
 
 const App = () => {
   const [tasksList1, setTasksList1] = useState([]);
@@ -15,7 +17,7 @@ const App = () => {
     fetch('http://localhost:3000/tasksList1')
       .then((response) => response.json())
       .then((data) => setTasksList1(data));
-
+      
     // Fetch data for List 2
     fetch('http://localhost:3000/tasksList2')
       .then((response) => response.json())
@@ -48,8 +50,7 @@ const App = () => {
     } else if (selectedList === 'list2') {
       setTasksList2([...tasksList2, newTask]);
     }
-  
-    
+
     // Determine the selected list and update accordingly
     if (selectedList === 'list1') {
       fetch('http://localhost:3000/tasksList1', {
@@ -98,38 +99,50 @@ const App = () => {
   };
 
   return (
-    <div className="App">
-      <h1>Task List</h1>
-      <button className="add-button" onClick={() => openModal('list1')}>
-        Add Task to List 1
-      </button>
-      <button className="add-button" onClick={() => openModal('list2')}>
-        Add Task to List 2
-      </button>
-      {isModalOpen && (
-        <Modal onClose={closeModal}>
-          <form onSubmit={addTask} className="form">
-            <label>
-              Enter task title:
-              <input
-                type="text"
-                name="title"
-                value={taskTitle}
-                onChange={handleTaskTitleChange}
-              />
-            </label>
-            <button type="submit">Add</button>
-            <button type="button" onClick={closeModal}>
-              Cancel
-            </button>
-          </form>
-        </Modal>
-      )}
-      <h2>List 1</h2>
-      <TaskList tasks={tasksList1} markTaskAsCompleted={markTaskAsCompleted} />
-      <h2>List 2</h2>
-      <TaskList tasks={tasksList2} markTaskAsCompleted={markTaskAsCompleted} />
-    </div>
+    <Router>
+      <div className="App">
+        <h1>Task List</h1>
+        <button className="add-button" onClick={() => openModal('list1')}>
+          Add Task to List 1
+        </button>
+        <button className="add-button" onClick={() => openModal('list2')}>
+          Add Task to List 2
+        </button>
+        {isModalOpen && (
+          <Modal onClose={closeModal}>
+            <form onSubmit={addTask} className="form">
+              <label>
+                Enter task title:
+                <input
+                  type="text"
+                  name="title"
+                  value={taskTitle}
+                  onChange={handleTaskTitleChange}
+                />
+              </label>
+              <button type="submit">Add</button>
+              <button type="button" onClick={closeModal}>
+                Cancel
+              </button>
+            </form>
+          </Modal>
+        )}
+        <h2>List 1</h2>
+        <TaskList tasks={tasksList1} markTaskAsCompleted={markTaskAsCompleted} />
+        <h2>List 2</h2>
+        <TaskList tasks={tasksList2} markTaskAsCompleted={markTaskAsCompleted} />
+      </div>
+      <div className="App">
+      {/*console.log(tasklist1)*/}
+        <Routes>
+          <Route
+            path="/task/:taskId"
+            
+            element={<TaskDetails tasks={tasksList1.concat(tasksList2)} />}
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
