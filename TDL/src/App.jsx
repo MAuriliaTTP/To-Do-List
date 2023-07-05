@@ -9,7 +9,9 @@ const App = () => {
   const [tasksList1, setTasksList1] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [taskTitle, setTaskTitle] = useState('');
+  const [taskDescription, setTaskDescription] = useState('');
   const [selectedList, setSelectedList] = useState(null);
+  const [editingTask, setEditingTask] = useState(null); // New state variable for the task being edited
 
   useEffect(() => {
     // Fetch data for List 1
@@ -26,10 +28,15 @@ const App = () => {
   const closeModal = () => {
     setModalOpen(false);
     setTaskTitle('');
+    setTaskDescription('');
   };
 
   const handleTaskTitleChange = (event) => {
     setTaskTitle(event.target.value);
+  };
+
+  const handleTaskDescriptionChange = (event) => {
+    setTaskDescription(event.target.value);
   };
 
   const addTask = (event) => {
@@ -37,12 +44,8 @@ const App = () => {
     if (taskTitle.trim() === '') {
       return;
     }
-    const newTask = { id: Date.now(), title: taskTitle, completed: false, description:'' };
+    const newTask = { id: Date.now(), title: taskTitle, completed: false, description: taskDescription };
 
-    if (selectedList === 'list1') {
-      setTasksList1([...tasksList1, newTask]);
-
-    // Determine the selected list and update accordingly
     if (selectedList === 'list1') {
       fetch('http://localhost:3000/tasksList1', {
         method: 'POST',
@@ -55,13 +58,16 @@ const App = () => {
         .then((data) => {
           setTasksList1([...tasksList1, data]);
           closeModal();
+        })
+        .catch((error) => {
+          console.error('Error adding task:', error);
         });
-    } 
     }
+
     closeModal();
   };
 
-  const updateTask = (taskId, updatedTaskData, tasks) => {
+  const updateTask = (taskId, updatedTaskData) => {
     // Send a PATCH request to update the task on the server
     fetch(`http://localhost:3000/tasksList1/${taskId}`, {
       method: 'PATCH',
@@ -73,7 +79,7 @@ const App = () => {
       .then((response) => response.json())
       .then((data) => {
         // Update the task in the local state
-        const updatedTasks = tasks.map((task) => {
+        const updatedTasks = tasksList1.map((task) => {
           if (task.id === taskId) {
             // Merge the updated data into the existing task object
             return { ...task, ...updatedTaskData };
@@ -81,6 +87,7 @@ const App = () => {
           return task;
         });
         setTasksList1(updatedTasks);
+        setEditingTask(null); // Clear the editingTask state after updating the task
       })
       .catch((error) => {
         console.error('Error updating task:', error);
@@ -115,7 +122,11 @@ const App = () => {
         task.id === taskId ? { ...task, completed: true } : task
       );
       setTasksList1(updatedTasks);
-    } 
+    }
+  };
+
+  const handleEditClick = (task) => {
+    setEditingTask(task);
   };
 
   return (
@@ -150,18 +161,19 @@ const App = () => {
           markTaskAsCompleted={markTaskAsCompleted}
           updateTask={updateTask}
           deleteTask={deleteTask}
+          handleEditClick={handleEditClick}
         />
       </div>
       <Routes>
-      <Route
+        <Route
           path="/"
-          element={<TaskList tasks={tasksList1} />}
+          element={<h1>Welcome to Task List App</h1>}
         />
         <Route
           path="/task/:taskId"
           element={<TaskDetails tasks={tasksList1} updateTask={updateTask} deleteTask={deleteTask} />}
         />
-    </Routes>
+      </Routes>
     </Router>
   );
 };
