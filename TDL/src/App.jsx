@@ -61,6 +61,53 @@ const App = () => {
     closeModal();
   };
 
+  const updateTask = (taskId, updatedTaskData, tasks) => {
+    // Send a PATCH request to update the task on the server
+    fetch(`http://localhost:3000/tasksList1/${taskId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(updatedTaskData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Update the task in the local state
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === taskId) {
+            // Merge the updated data into the existing task object
+            return { ...task, ...updatedTaskData };
+          }
+          return task;
+        });
+        setTasksList1(updatedTasks);
+      })
+      .catch((error) => {
+        console.error('Error updating task:', error);
+      });
+  };
+
+  const deleteTask = (taskId) => {
+    // Remove the task from tasksList1 state and send a DELETE request to delete the task on the server
+    const updatedTasks = tasksList1.filter((task) => task.id !== taskId);
+
+    setTasksList1(updatedTasks);
+
+    fetch(`http://localhost:3000/tasksList1/${taskId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Handle the response if needed
+        } else {
+          throw new Error('Error deleting task');
+        }
+      })
+      .catch((error) => {
+        console.error('Error deleting task:', error);
+      });
+  };
+
   const markTaskAsCompleted = (taskId) => {
     // Determine the selected list and update accordingly
     if (selectedList === 'list1') {
@@ -98,14 +145,22 @@ const App = () => {
           </Modal>
         )}
         <h2>List</h2>
-        <TaskList tasks={tasksList1} markTaskAsCompleted={markTaskAsCompleted} />
+        <TaskList
+          tasks={tasksList1}
+          markTaskAsCompleted={markTaskAsCompleted}
+          updateTask={updateTask}
+          deleteTask={deleteTask}
+        />
       </div>
       <Routes>
       <Route
-        path="/"
-        element={<TaskList tasks={tasksList1} markTaskAsCompleted={markTaskAsCompleted} />}
-      />
-      <Route path="/task/:taskId" element={<TaskDetails tasks={tasksList1} />} />
+          path="/"
+          element={<TaskList tasks={tasksList1} />}
+        />
+        <Route
+          path="/task/:taskId"
+          element={<TaskDetails tasks={tasksList1} updateTask={updateTask} deleteTask={deleteTask} />}
+        />
     </Routes>
     </Router>
   );

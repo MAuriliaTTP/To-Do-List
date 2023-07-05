@@ -1,19 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 
-const TaskList = ({ tasks, markTaskAsCompleted }) => {
-  return (
-    <ul>
-      {tasks.map((task) => (
-        <li key={task.id}>
-          <Link to={`/task/${task.id}`}>{task.title}</Link>
-          <button onClick={() => markTaskAsCompleted(task.id)}>Mark as Completed</button>
-        </li>
-      ))}
-    </ul>
-  );
-};
-
 const TaskDetails = ({ tasks }) => {
   const { taskId } = useParams();
   const [task, setTask] = useState(null);
