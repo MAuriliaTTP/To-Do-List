@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams } from 'react-router-dom';
 
-const TaskDetails = ({ tasks }) => {
+const TaskDetails = ({ tasks, updateTask, deleteTask }) => {
   const { taskId } = useParams();
   const [task, setTask] = useState(null);
   const [taskDescription, setTaskDescription] = useState('');
+  const [taskTitle, setTaskTitle] = useState('');
 
   useEffect(() => {
     const foundTask = tasks.find((task) => task.id.toString() === taskId);
@@ -15,6 +16,10 @@ const TaskDetails = ({ tasks }) => {
     setTaskDescription(event.target.value);
   };
 
+  const handleTaskTitleChange = (event) => {
+    setTaskTitle(event.target.value);
+  };
+
   const updateDescription = (event) => {
     event.preventDefault();
 
@@ -22,7 +27,7 @@ const TaskDetails = ({ tasks }) => {
       return;
     }
 
-    const updatedTask = { ...task, description: taskDescription };
+    const updatedTask = { ...task, description: taskDescription, title: taskTitle};
 
     fetch(`http://localhost:3000/tasksList1/${taskId}`, {
       method: 'PATCH',
@@ -36,8 +41,10 @@ const TaskDetails = ({ tasks }) => {
         setTask(data);
       })
       .catch((error) => {
-        console.error('Error updating task description:', error);
+        console.error('Error updating task: ', error);
       });
+
+      updateTask(taskId, updatedTask);
   };
 
   return (
@@ -50,6 +57,14 @@ const TaskDetails = ({ tasks }) => {
           <p>Description: {task.description}</p>
 
           <form onSubmit={updateDescription}>
+          <label>
+              Enter new title:
+              <input
+                type="text"
+                value={taskTitle}
+                onChange={handleTaskTitleChange}
+              />
+            </label>
             <label>
               Enter new task description:
               <input
@@ -58,7 +73,7 @@ const TaskDetails = ({ tasks }) => {
                 onChange={handleDescriptionChange}
               />
             </label>
-            <button type="submit">Update Description</button>
+            <button type="submit">Update Task</button>
           </form>
         </div>
       ) : (

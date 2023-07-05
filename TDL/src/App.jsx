@@ -35,10 +35,7 @@ const App = () => {
     setTaskTitle(event.target.value);
   };
 
-  const handleTaskDescriptionChange = (event) => {
-    setTaskDescription(event.target.value);
-  };
-
+  
   const addTask = (event) => {
     event.preventDefault();
     if (taskTitle.trim() === '') {
@@ -69,6 +66,7 @@ const App = () => {
 
   const updateTask = (taskId, updatedTaskData) => {
     // Send a PATCH request to update the task on the server
+    console.log('Clicked');
     fetch(`http://localhost:3000/tasksList1/${taskId}`, {
       method: 'PATCH',
       headers: {
@@ -82,7 +80,7 @@ const App = () => {
         const updatedTasks = tasksList1.map((task) => {
           if (task.id === taskId) {
             // Merge the updated data into the existing task object
-            return { ...task, ...updatedTaskData };
+            return { ...task, ...data };
           }
           return task;
         });
@@ -126,6 +124,7 @@ const App = () => {
   };
 
   const handleEditClick = (task) => {
+    console.log('Clicked');
     setEditingTask(task);
   };
 
