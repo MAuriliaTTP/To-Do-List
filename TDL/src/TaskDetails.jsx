@@ -45,6 +45,7 @@ const TaskDetails = ({ tasks, updateTask, deleteTask }) => {
       });
 
       updateTask(taskId, updatedTask);
+      location.reload();
   };
 
   return (
