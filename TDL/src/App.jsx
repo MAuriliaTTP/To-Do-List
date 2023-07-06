@@ -66,7 +66,6 @@ const App = () => {
 
   const updateTask = (taskId, updatedTaskData) => {
     // Send a PATCH request to update the task on the server
-    console.log('Clicked');
     fetch(`http://localhost:3000/tasksList1/${taskId}`, {
       method: 'PATCH',
       headers: {
@@ -78,7 +77,7 @@ const App = () => {
       .then((data) => {
         // Update the task in the local state
         const updatedTasks = tasksList1.map((task) => {
-          if (task.id === taskId) {
+          if (task.id === parseInt(taskId)) {
             // Merge the updated data into the existing task object
             return { ...task, ...data };
           }
@@ -131,7 +130,7 @@ const App = () => {
   return (
     <Router>
       <div className="App">
-        <h1>Task List</h1>
+        <h1>Add to list:</h1>
         <button className="add-button" onClick={() => openModal('list1')}>
           Add Task
         </button>
@@ -154,7 +153,7 @@ const App = () => {
             </form>
           </Modal>
         )}
-        <h2>List</h2>
+        <h2>List:</h2>
         <TaskList
           tasks={tasksList1}
           markTaskAsCompleted={markTaskAsCompleted}
@@ -166,7 +165,7 @@ const App = () => {
       <Routes>
         <Route
           path="/"
-          element={<h1>Welcome to Task List App</h1>}
+          element={<h1>Welcome to the To-Do List App! Click on a task to edit it or add a new task using the Add Task button.</h1>}
         />
         <Route
           path="/task/:taskId"

@@ -29,23 +29,8 @@ const TaskDetails = ({ tasks, updateTask, deleteTask }) => {
 
     const updatedTask = { ...task, description: taskDescription, title: taskTitle};
 
-    fetch(`http://localhost:3000/tasksList1/${taskId}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedTask),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setTask(data);
-      })
-      .catch((error) => {
-        console.error('Error updating task: ', error);
-      });
-
-      updateTask(taskId, updatedTask);
-      location.reload();
+    updateTask(taskId, updatedTask);
+      
   };
 
   return (
