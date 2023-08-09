@@ -1,6 +1,6 @@
 To-Do-List
 
-A simple web-based task management application built with React and React Router. This app allows users to create, view, edit, and delete tasks. Tasks are organized into a list, and each task can be marked as completed.
+A web-based task management application built with React and React Router. This app allows users to create, view, edit, and delete tasks. Tasks are organized into a list, and each task can be marked as completed.
 
 Features:
 
