@@ -21,7 +21,7 @@ Use the "Mark as Completed" button to mark a task as completed.
 
 Technologies Used:
 
-React
-React Router
-JavaScript
+React,
+React Router,
+JavaScript,
 CSS
